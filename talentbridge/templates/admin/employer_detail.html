@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">{{ employer.company_name }}</h1>
+        <p class="lead mb-0">Employer Request Details</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Company Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Company Name</label>
+                            <p class="fw-bold">{{ employer.company_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Industry</label>
+                            <p class="fw-bold">{{ employer.industry or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Company Size</label>
+                            <p class="fw-bold">{{ employer.company_size or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 mt-4">Contact Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Contact Name</label>
+                            <p class="fw-bold">{{ employer.contact_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Email</label>
+                            <p class="fw-bold">{{ employer.contact_email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Phone</label>
+                            <p class="fw-bold">{{ employer.phone or 'Not provided' }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 mt-4">Hiring Details</h5>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted">Positions</label>
+                            <p class="fw-bold">{{ employer.positions_count or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted">Budget Range</label>
+                            <p class="fw-bold">{{ employer.budget_range or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="text-muted">Timeline</label>
+                            <p class="fw-bold">{{ employer.timeline or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 mt-4">Hiring Needs</h5>
+                    <p>{{ employer.hiring_needs }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Update Status</h5>
+                    <form method="POST" action="{{ url_for('admin.update_employer_status', employer_id=employer.id) }}">
+                        <div class="mb-3">
+                            <select class="form-select" name="status">
+                                <option value="pending" {% if employer.status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="contacted" {% if employer.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                                <option value="in_progress" {% if employer.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                                <option value="closed" {% if employer.status == 'closed' %}selected{% endif %}>Closed</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" name="notes" rows="4">{{ employer.notes or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

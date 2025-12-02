@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Uploaded Resumes</h1>
+        <p class="lead mb-0">View all resumes uploaded by users.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    {% if resumes.items %}
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Filename</th>
+                        <th>Skills</th>
+                        <th>Experience</th>
+                        <th>Primary</th>
+                        <th>Uploaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for resume in resumes.items %}
+                    <tr>
+                        <td>{{ resume.user.full_name }}<br><small class="text-muted">{{ resume.user.email }}</small></td>
+                        <td>{{ resume.filename }}</td>
+                        <td>
+                            {% for skill in resume.get_skills_list()[:3] %}
+                            <span class="skill-tag">{{ skill }}</span>
+                            {% endfor %}
+                            {% if resume.get_skills_list()|length > 3 %}
+                            <span class="text-muted">+{{ resume.get_skills_list()|length - 3 }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ resume.experience_years or '-' }} years</td>
+                        <td>
+                            {% if resume.is_primary %}
+                            <span class="badge bg-success">Yes</span>
+                            {% else %}
+                            <span class="badge bg-secondary">No</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ resume.upload_date.strftime('%b %d, %Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-file-alt"></i>
+        <h4>No resumes uploaded yet</h4>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

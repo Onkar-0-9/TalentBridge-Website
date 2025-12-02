@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Sign In</h1>
+        <p class="lead mb-0">Welcome back! Sign in to access your account.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.login') }}" data-validate>
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form.email.label.text }}</label>
+                            {{ form.email(class="form-control form-control-lg", placeholder="Enter your email") }}
+                            {% for error in form.email.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form.password.label.text }}</label>
+                            {{ form.password(class="form-control form-control-lg", placeholder="Enter your password") }}
+                            {% for error in form.password.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                {{ form.remember_me(class="form-check-input") }}
+                                <label class="form-check-label" for="remember_me">Remember me</label>
+                            </div>
+                            <a href="{{ url_for('auth.forgot_password') }}" class="text-decoration-none">Forgot password?</a>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </button>
+                        
+                        <p class="text-center text-muted mb-0">
+                            Don't have an account? <a href="{{ url_for('auth.register') }}" class="fw-bold">Register here</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

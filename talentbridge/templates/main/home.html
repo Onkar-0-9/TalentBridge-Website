@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-8 mx-auto text-center text-white position-relative">
+                <h1 class="display-4 fw-bold mb-4">Find Your Dream Job Today</h1>
+                <p class="lead mb-5">Connecting talented professionals with amazing opportunities from LinkedIn, Indeed, Naukri, and more - all in one place.</p>
+                
+                <form action="{{ url_for('jobs.job_list') }}" method="get" class="search-form">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" class="form-control" name="keyword" placeholder="Job title, skills, or company">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group input-group-lg">
+                                <span class="input-group-text bg-white"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                                <input type="text" class="form-control" name="location" placeholder="City or remote">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-warning btn-lg w-100 fw-bold">
+                                <i class="fas fa-search me-2"></i>Search Jobs
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="mt-4">
+                    <span class="badge bg-light text-dark me-2 p-2">{{ job_count }}+ Active Jobs</span>
+                    <span class="badge bg-light text-dark me-2 p-2">Multi-Platform Search</span>
+                    <span class="badge bg-light text-dark p-2">AI-Powered Matching</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-layer-group fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Multi-Platform Jobs</h5>
+                <p class="text-muted">Jobs from LinkedIn, Indeed, Naukri, and more aggregated in one place.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-robot fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">AI Matching</h5>
+                <p class="text-muted">Upload your resume and get personalized job recommendations.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-icon bg-warning text-dark rounded-circle mx-auto mb-3">
+                    <i class="fas fa-bolt fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Quick Apply</h5>
+                <p class="text-muted">Apply to multiple jobs with your saved profile in seconds.</p>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="feature-icon bg-info text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-bell fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Job Alerts</h5>
+                <p class="text-muted">Get notified when new jobs match your skills and preferences.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">Featured Jobs</h2>
+            <a href="{{ url_for('jobs.job_list') }}" class="btn btn-outline-primary">View All Jobs <i class="fas fa-arrow-right ms-2"></i></a>
+        </div>
+        
+        <div class="row">
+            {% for job in featured_jobs %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card job-card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="company-logo bg-light rounded p-2">
+                                <i class="fas fa-building fa-2x text-primary"></i>
+                            </div>
+                            {% if job.is_featured %}
+                            <span class="badge bg-warning text-dark">Featured</span>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                        <p class="text-muted mb-2"><i class="fas fa-building me-2"></i>{{ job.company }}</p>
+                        <p class="text-muted mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ job.location or 'Location not specified' }}</p>
+                        <p class="text-muted mb-3"><i class="fas fa-clock me-2"></i>{{ job.job_type or 'Full-time' }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">{{ job.get_salary_display() }}</span>
+                            <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No featured jobs available at the moment</h5>
+                <p class="text-muted">Check back soon for new opportunities!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% if industries %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-4">Browse by Industry</h2>
+        <div class="row justify-content-center">
+            {% for industry in industries %}
+            <div class="col-lg-3 col-md-4 col-6 mb-3">
+                <a href="{{ url_for('jobs.job_list', industry=industry) }}" class="btn btn-outline-primary w-100 py-3">
+                    {{ industry }}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-3">Upload Your Resume & Get Matched</h2>
+                <p class="lead mb-4">Our AI-powered system analyzes your skills and experience to recommend the best jobs for you. Save time and find opportunities you might have missed.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('resumes.upload') }}" class="btn btn-warning btn-lg fw-bold">
+                        <i class="fas fa-upload me-2"></i>Upload Resume
+                    </a>
+                    <a href="{{ url_for('main.candidate_services') }}" class="btn btn-outline-light btn-lg">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="upload-illustration">
+                    <i class="fas fa-file-upload fa-8x opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if testimonials %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-5">What Our Users Say</h2>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card testimonial-card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="stars mb-3">
+                            {% for i in range(testimonial.rating) %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                        <p class="card-text">"{{ testimonial.content }}"</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary text-white rounded-circle me-3">
+                                {{ testimonial.name[0] }}
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ testimonial.name }}</h6>
+                                <small class="text-muted">{{ testimonial.position }}{% if testimonial.company %} at {{ testimonial.company }}{% endif %}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="py-5 bg-dark text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Ready to Hire Top Talent?</h2>
+        <p class="lead mb-4">Access thousands of qualified candidates and fill your positions faster with TalentBridge.</p>
+        <a href="{{ url_for('main.employer_services') }}" class="btn btn-warning btn-lg fw-bold">
+            <i class="fas fa-building me-2"></i>Post a Job Now
+        </a>
+    </div>
+</section>
+{% endblock %}

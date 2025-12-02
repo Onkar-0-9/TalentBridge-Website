@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">My Resumes</h1>
+        <p class="lead mb-0">Manage your uploaded resumes.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="mb-0">{{ resumes|length }} Resume(s) Uploaded</h5>
+        <a href="{{ url_for('resumes.upload') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Upload New Resume
+        </a>
+    </div>
+    
+    {% if resumes %}
+    <div class="row">
+        {% for resume in resumes %}
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="file-icon bg-light rounded p-3 me-3">
+                                {% if '.pdf' in resume.filename.lower() %}
+                                <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                                {% else %}
+                                <i class="fas fa-file-word fa-2x text-primary"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ resume.filename }}</h6>
+                                <small class="text-muted">Uploaded {{ resume.upload_date.strftime('%b %d, %Y') }}</small>
+                            </div>
+                        </div>
+                        {% if resume.is_primary %}
+                        <span class="badge bg-success">Primary</span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if resume.extracted_skills %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-2">Extracted Skills:</small>
+                        {% for skill in resume.get_skills_list()[:5] %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                        {% if resume.get_skills_list()|length > 5 %}
+                        <span class="text-muted">+{{ resume.get_skills_list()|length - 5 }} more</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if resume.experience_years %}
+                    <p class="mb-3"><i class="fas fa-briefcase me-2 text-muted"></i>{{ resume.experience_years }} years of experience</p>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ url_for('resumes.download_resume', resume_id=resume.id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                        <a href="{{ url_for('resumes.analyze', resume_id=resume.id) }}" class="btn btn-outline-info btn-sm">
+                            <i class="fas fa-chart-bar me-1"></i>Analysis
+                        </a>
+                        {% if not resume.is_primary %}
+                        <form action="{{ url_for('resumes.set_primary', resume_id=resume.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-outline-success btn-sm">
+                                <i class="fas fa-star me-1"></i>Set Primary
+                            </button>
+                        </form>
+                        {% endif %}
+                        <form action="{{ url_for('resumes.delete_resume', resume_id=resume.id) }}" method="POST" class="d-inline" onsubmit="return confirmDelete('Are you sure you want to delete this resume?')">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{{ url_for('resumes.recommended') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-star me-2"></i>View Recommended Jobs
+        </a>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-file-alt"></i>
+        <h4>No resumes uploaded yet</h4>
+        <p class="text-muted">Upload your resume to get personalized job recommendations.</p>
+        <a href="{{ url_for('resumes.upload') }}" class="btn btn-primary">Upload Resume</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

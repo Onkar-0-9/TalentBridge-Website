@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Aggregated Jobs</h1>
+        <p class="lead mb-0">Jobs collected from external platforms.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{{ url_for('admin.manage_aggregated_jobs') }}" class="btn btn-{{ 'primary' if not platform_filter else 'outline-primary' }} btn-sm">All</a>
+            {% for platform in platforms %}
+            <a href="{{ url_for('admin.manage_aggregated_jobs', platform=platform) }}" class="btn btn-{{ 'primary' if platform_filter == platform else 'outline-primary' }} btn-sm">{{ platform|title }}</a>
+            {% endfor %}
+        </div>
+        <form action="{{ url_for('admin.run_aggregation') }}" method="POST">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-sync me-2"></i>Run Aggregation
+            </button>
+        </form>
+    </div>
+    
+    {% if jobs.items %}
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Salary</th>
+                        <th>Scraped</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs.items %}
+                    <tr>
+                        <td><span class="source-badge {{ job.source_platform }}">{{ job.source_platform|title }}</span></td>
+                        <td><strong>{{ job.title }}</strong></td>
+                        <td>{{ job.company }}</td>
+                        <td>{{ job.location or '-' }}</td>
+                        <td>{{ job.salary_info or '-' }}</td>
+                        <td>{{ job.scraped_at.strftime('%b %d, %Y') }}</td>
+                        <td>
+                            <a href="{{ job.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-layer-group"></i>
+        <h4>No aggregated jobs</h4>
+        <p class="text-muted">Run the aggregation to collect jobs from external platforms.</p>
+        <form action="{{ url_for('admin.run_aggregation') }}" method="POST">
+            <button type="submit" class="btn btn-primary">Run Aggregation</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

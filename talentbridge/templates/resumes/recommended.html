@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Recommended Jobs</h1>
+        <p class="lead mb-0">Jobs matched to your skills and experience.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Your Profile</h5>
+                    <p class="text-muted mb-2"><i class="fas fa-file-alt me-2"></i>{{ resume.filename }}</p>
+                    {% if resume.experience_years %}
+                    <p class="text-muted mb-3"><i class="fas fa-briefcase me-2"></i>{{ resume.experience_years }} years experience</p>
+                    {% endif %}
+                    
+                    <h6 class="fw-bold mt-4 mb-2">Detected Skills</h6>
+                    <div class="mb-3">
+                        {% for skill in skills[:10] %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                        {% if skills|length > 10 %}
+                        <span class="text-muted d-block mt-2">+{{ skills|length - 10 }} more skills</span>
+                        {% endif %}
+                    </div>
+                    
+                    <a href="{{ url_for('resumes.upload') }}" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-sync me-2"></i>Update Resume
+                    </a>
+                </div>
+            </div>
+            
+            {% if ai_recommendations %}
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-robot text-primary me-2"></i>AI Recommendations</h5>
+                    <div class="text-muted">{{ ai_recommendations }}</div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0">{{ matched_jobs|length }} Job(s) Matched</h5>
+            </div>
+            
+            {% if matched_jobs %}
+            {% for job, match_data in matched_jobs %}
+            <div class="card job-card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-start">
+                                <div class="company-logo bg-light rounded p-2 me-3">
+                                    <i class="fas fa-building fa-lg text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">{{ job.title }}</h5>
+                                    <p class="text-muted mb-1">{{ job.company }} - {{ job.location or 'Location not specified' }}</p>
+                                    <p class="text-success fw-bold mb-2">{{ job.get_salary_display() }}</p>
+                                    
+                                    {% if job.skills_required %}
+                                    <div class="mb-2">
+                                        {% for skill in job.skills_required.split(',')[:4] %}
+                                        <span class="skill-tag">{{ skill.strip() }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <div class="match-score {% if match_data.overall_score >= 70 %}{% elif match_data.overall_score >= 40 %}medium{% else %}low{% endif %} mb-2">
+                                {{ match_data.overall_score }}% Match
+                            </div>
+                            <div class="small text-muted mb-2">
+                                Skills: {{ match_data.skill_match }}% | Title: {{ match_data.title_match }}%
+                            </div>
+                            <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-primary">View Job</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>No matching jobs found</h4>
+                <p class="text-muted">We couldn't find jobs that match your profile. Try updating your resume or check back later.</p>
+                <a href="{{ url_for('jobs.job_list') }}" class="btn btn-primary">Browse All Jobs</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

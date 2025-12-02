@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Candidates</h1>
+        <p class="lead mb-0">View candidate submissions from the CV form.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    {% if candidates.items %}
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidate in candidates.items %}
+                    <tr>
+                        <td><strong>{{ candidate.name }}</strong></td>
+                        <td>{{ candidate.email }}</td>
+                        <td>{{ candidate.phone or '-' }}</td>
+                        <td>{{ candidate.experience_years or 0 }} years</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if candidate.status == 'contacted' else 'warning' if candidate.status == 'reviewing' else 'secondary' }}">
+                                {{ candidate.status|title }}
+                            </span>
+                        </td>
+                        <td>{{ candidate.submitted_at.strftime('%b %d, %Y') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.view_candidate', candidate_id=candidate.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-user-tie"></i>
+        <h4>No candidates yet</h4>
+        <p class="text-muted">Candidates who submit their CV will appear here.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">{{ 'Edit Job' if job else 'Create New Job' }}</h1>
+        <p class="lead mb-0">{{ 'Update job details' if job else 'Add a new job listing' }}</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-bold">Job Title *</label>
+                                <input type="text" class="form-control" name="title" value="{{ job.title if job else '' }}" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Job Type</label>
+                                <select class="form-select" name="job_type">
+                                    <option value="">Select Type</option>
+                                    {% for jt in ['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship', 'Remote'] %}
+                                    <option value="{{ jt }}" {% if job and job.job_type == jt %}selected{% endif %}>{{ jt }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Company *</label>
+                                <input type="text" class="form-control" name="company" value="{{ job.company if job else '' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" class="form-control" name="location" value="{{ job.location if job else '' }}" placeholder="e.g., New York, NY or Remote">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Industry</label>
+                                <select class="form-select" name="industry">
+                                    <option value="">Select Industry</option>
+                                    {% for ind in ['Technology', 'Finance', 'Healthcare', 'Education', 'Manufacturing', 'Retail', 'Marketing', 'Consulting', 'Other'] %}
+                                    <option value="{{ ind }}" {% if job and job.industry == ind %}selected{% endif %}>{{ ind }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Experience Level</label>
+                                <select class="form-select" name="experience_level">
+                                    <option value="">Select Level</option>
+                                    {% for level in ['Entry Level', 'Mid Level', 'Senior', 'Lead', 'Manager', 'Director', 'Executive'] %}
+                                    <option value="{{ level }}" {% if job and job.experience_level == level %}selected{% endif %}>{{ level }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Salary Min</label>
+                                <input type="number" class="form-control" name="salary_min" value="{{ job.salary_min if job and job.salary_min else '' }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Salary Max</label>
+                                <input type="number" class="form-control" name="salary_max" value="{{ job.salary_max if job and job.salary_max else '' }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Currency</label>
+                                <select class="form-select" name="salary_currency">
+                                    {% for cur in ['USD', 'EUR', 'GBP', 'INR', 'CAD', 'AUD'] %}
+                                    <option value="{{ cur }}" {% if job and job.salary_currency == cur %}selected{% endif %}>{{ cur }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Job Description *</label>
+                            <textarea class="form-control" name="description" rows="6" required>{{ job.description if job else '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Requirements</label>
+                            <textarea class="form-control" name="requirements" rows="4">{{ job.requirements if job else '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Required Skills</label>
+                            <input type="text" class="form-control" name="skills_required" value="{{ job.skills_required if job else '' }}" placeholder="e.g., Python, JavaScript, SQL (comma-separated)">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Application URL</label>
+                            <input type="url" class="form-control" name="apply_url" value="{{ job.apply_url if job else '' }}" placeholder="https://...">
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="is_featured" name="is_featured" {% if job and job.is_featured %}checked{% endif %}>
+                                    <label class="form-check-label" for="is_featured">Featured Job</label>
+                                </div>
+                            </div>
+                            {% if job %}
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {% if job.is_active %}checked{% endif %}>
+                                    <label class="form-check-label" for="is_active">Active</label>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin.manage_jobs') }}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>{{ 'Update Job' if job else 'Create Job' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Upload Resume</h1>
+        <p class="lead mb-0">Upload your resume and let our AI match you with the best jobs.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('resumes.upload') }}" enctype="multipart/form-data">
+                        <div class="resume-upload-zone mb-4" id="uploadZone">
+                            <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-3"></i>
+                            <h5>Drag & Drop your resume here</h5>
+                            <p class="text-muted mb-3">or click to browse</p>
+                            <input type="file" name="resume" id="resumeFile" class="d-none" accept=".pdf,.docx" required>
+                            <span class="badge bg-light text-dark">Supported: PDF, DOCX (Max 16MB)</span>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input type="checkbox" class="form-check-input" id="setPrimary" name="set_primary" checked>
+                            <label class="form-check-label" for="setPrimary">Set as my primary resume</label>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <h6 class="fw-bold"><i class="fas fa-magic me-2"></i>AI-Powered Analysis</h6>
+                            <p class="mb-0">Our system will automatically extract your skills, experience, and qualifications to match you with relevant job opportunities.</p>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-upload me-2"></i>Upload & Analyze
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Tips for a Better Resume</h5>
+                    <ul class="mb-0">
+                        <li class="mb-2">Keep your resume concise and focused (1-2 pages)</li>
+                        <li class="mb-2">Include relevant keywords from job descriptions</li>
+                        <li class="mb-2">Highlight your achievements with quantifiable results</li>
+                        <li class="mb-2">Use a clean, professional format</li>
+                        <li>Proofread for spelling and grammar errors</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

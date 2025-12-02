@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Contact Us</h1>
+        <p class="lead mb-0">We'd love to hear from you. Get in touch with our team.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                        <i class="fas fa-map-marker-alt fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Our Office</h5>
+                    <p class="text-muted mb-0">
+                        123 Business Avenue<br>
+                        Suite 400<br>
+                        New York, NY 10001
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                        <i class="fas fa-phone fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Call Us</h5>
+                    <p class="text-muted mb-0">
+                        +1 (555) 123-4567<br>
+                        Mon - Fri: 9AM - 6PM EST
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon bg-warning text-dark rounded-circle mx-auto mb-3">
+                        <i class="fas fa-envelope fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Email Us</h5>
+                    <p class="text-muted mb-0">
+                        info@talentbridge.com<br>
+                        support@talentbridge.com
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-4">Send Us a Message</h4>
+                    <form method="POST" action="{{ url_for('main.contact') }}">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Your Name *</label>
+                            <input type="text" class="form-control form-control-lg" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email *</label>
+                            <input type="email" class="form-control form-control-lg" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Subject *</label>
+                            <input type="text" class="form-control form-control-lg" name="subject" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Message *</label>
+                            <textarea class="form-control" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-0">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.25280747792!2d-74.11976341116486!3d40.69766374864767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2suk!4v1620000000000!5m2!1sen!2suk"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; min-height: 400px; border-radius: 12px;" 
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

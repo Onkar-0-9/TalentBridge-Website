@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">My Profile</h1>
+        <p class="lead mb-0">Manage your account information and preferences.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <div class="avatar bg-primary text-white rounded-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
+                        {{ current_user.full_name[0] }}
+                    </div>
+                    <h4 class="fw-bold mb-1">{{ current_user.full_name }}</h4>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                    <p class="text-muted mb-0"><small>Member since {{ current_user.created_at.strftime('%B %Y') }}</small></p>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <a href="{{ url_for('resumes.my_resumes') }}" class="text-decoration-none">
+                                <i class="fas fa-file-alt me-2 text-primary"></i>My Resumes
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{ url_for('resumes.recommended') }}" class="text-decoration-none">
+                                <i class="fas fa-star me-2 text-warning"></i>Recommended Jobs
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{ url_for('auth.saved_jobs') }}" class="text-decoration-none">
+                                <i class="fas fa-bookmark me-2 text-success"></i>Saved Jobs
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('resumes.upload') }}" class="text-decoration-none">
+                                <i class="fas fa-upload me-2 text-info"></i>Upload Resume
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">Profile Information</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.profile') }}">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="update_profile" value="1">
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ form.full_name.label.text }}</label>
+                                {{ form.full_name(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ form.phone.label.text }}</label>
+                                {{ form.phone(class="form-control") }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form.location.label.text }}</label>
+                            {{ form.location(class="form-control", placeholder="City, Country") }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form.bio.label.text }}</label>
+                            {{ form.bio(class="form-control", rows="4", placeholder="Tell us about yourself...") }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-bold mb-0">Change Password</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.change_password') }}">
+                        {{ password_form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ password_form.current_password.label.text }}</label>
+                            {{ password_form.current_password(class="form-control") }}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ password_form.new_password.label.text }}</label>
+                                {{ password_form.new_password(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">{{ password_form.confirm_password.label.text }}</label>
+                                {{ password_form.confirm_password(class="form-control") }}
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-key me-2"></i>Change Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

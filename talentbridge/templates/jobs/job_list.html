@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Find Jobs</h1>
+        <p class="lead mb-0">Browse thousands of opportunities from top companies and platforms.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <div class="filter-sidebar">
+                <h5 class="fw-bold mb-4">Filter Jobs</h5>
+                
+                <form action="{{ url_for('jobs.job_list') }}" method="get">
+                    <div class="mb-4">
+                        <h6>Keyword</h6>
+                        <input type="text" class="form-control" name="keyword" value="{{ filters.keyword }}" placeholder="Job title, skills...">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Location</h6>
+                        <input type="text" class="form-control" name="location" value="{{ filters.location }}" placeholder="City or remote">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Industry</h6>
+                        <select class="form-select" name="industry">
+                            <option value="">All Industries</option>
+                            {% for ind in industries %}
+                            <option value="{{ ind }}" {% if filters.industry == ind %}selected{% endif %}>{{ ind }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Job Type</h6>
+                        <select class="form-select" name="job_type">
+                            <option value="">All Types</option>
+                            {% for jt in job_types %}
+                            <option value="{{ jt }}" {% if filters.job_type == jt %}selected{% endif %}>{{ jt }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
+                    
+                    <a href="{{ url_for('jobs.job_list') }}" class="btn btn-outline-secondary w-100 mt-2">Clear Filters</a>
+                </form>
+            </div>
+        </div>
+        
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="text-muted mb-0">
+                    Found <strong>{{ jobs.total }}</strong> jobs
+                    {% if aggregated_jobs %} + <strong>{{ aggregated_jobs|length }}</strong> from external platforms{% endif %}
+                </p>
+            </div>
+            
+            {% if jobs.items %}
+            <div class="row">
+                {% for job in jobs.items %}
+                <div class="col-md-6 mb-4">
+                    <div class="card job-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="company-logo bg-light rounded p-2">
+                                    <i class="fas fa-building fa-lg text-primary"></i>
+                                </div>
+                                {% if job.is_featured %}
+                                <span class="badge bg-warning text-dark">Featured</span>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                            <p class="text-muted mb-1"><i class="fas fa-building me-2"></i>{{ job.company }}</p>
+                            <p class="text-muted mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ job.location or 'Location not specified' }}</p>
+                            <p class="text-muted mb-2"><i class="fas fa-clock me-2"></i>{{ job.job_type or 'Full-time' }}</p>
+                            
+                            {% if job.skills_required %}
+                            <div class="mb-3">
+                                {% for skill in job.skills_required.split(',')[:3] %}
+                                <span class="skill-tag">{{ skill.strip() }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-success fw-bold">{{ job.get_salary_display() }}</span>
+                                <a href="{{ url_for('jobs.job_detail', job_id=job.id) }}" class="btn btn-outline-primary btn-sm">View</a>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <small class="text-muted">Posted {{ job.posted_date.strftime('%b %d, %Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if jobs.pages > 1 %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if jobs.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('jobs.job_list', page=jobs.prev_num, **filters) }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in jobs.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                        <li class="page-item {% if page_num == jobs.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('jobs.job_list', page=page_num, **filters) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if jobs.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('jobs.job_list', page=jobs.next_num, **filters) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h4>No jobs found</h4>
+                <p class="text-muted">Try adjusting your filters or search terms.</p>
+            </div>
+            {% endif %}
+            
+            {% if aggregated_jobs %}
+            <hr class="my-5">
+            <h4 class="fw-bold mb-4">Jobs from External Platforms</h4>
+            <div class="row">
+                {% for job in aggregated_jobs %}
+                <div class="col-md-6 mb-4">
+                    <div class="card job-card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="source-badge {{ job.source_platform }}">{{ job.source_platform|title }}</span>
+                            </div>
+                            <h5 class="card-title fw-bold">{{ job.title }}</h5>
+                            <p class="text-muted mb-1"><i class="fas fa-building me-2"></i>{{ job.company }}</p>
+                            <p class="text-muted mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ job.location or 'Location not specified' }}</p>
+                            {% if job.salary_info %}
+                            <p class="text-success fw-bold mb-2">{{ job.salary_info }}</p>
+                            {% endif %}
+                            
+                            <a href="{{ job.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                View on {{ job.source_platform|title }} <i class="fas fa-external-link-alt ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

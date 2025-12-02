@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-2">
+                <li class="breadcrumb-item"><a href="{{ url_for('jobs.job_list') }}" class="text-white-50">Jobs</a></li>
+                <li class="breadcrumb-item active text-white">{{ job.title }}</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold">{{ job.title }}</h1>
+        <p class="lead mb-0">{{ job.company }} - {{ job.location or 'Location not specified' }}</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="job-detail-header mb-4">
+                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="company-logo bg-light rounded p-3 me-3">
+                            <i class="fas fa-building fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-1">{{ job.title }}</h4>
+                            <p class="text-muted mb-0">{{ job.company }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <form action="{{ url_for('jobs.save_job', job_id=job.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn {% if is_saved %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                                <i class="fas fa-heart me-1"></i>{% if is_saved %}Saved{% else %}Save{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="text-muted"><i class="fas fa-map-marker-alt me-2"></i>Location</div>
+                        <div class="fw-bold">{{ job.location or 'Not specified' }}</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-muted"><i class="fas fa-clock me-2"></i>Job Type</div>
+                        <div class="fw-bold">{{ job.job_type or 'Full-time' }}</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-muted"><i class="fas fa-dollar-sign me-2"></i>Salary</div>
+                        <div class="fw-bold text-success">{{ job.get_salary_display() }}</div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="text-muted"><i class="fas fa-briefcase me-2"></i>Experience</div>
+                        <div class="fw-bold">{{ job.experience_level or 'Not specified' }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="job-detail-body">
+                <h5 class="fw-bold mb-3">Job Description</h5>
+                <div class="mb-4">
+                    {{ job.description|safe if job.description else 'No description available.' }}
+                </div>
+                
+                {% if job.requirements %}
+                <h5 class="fw-bold mb-3">Requirements</h5>
+                <div class="mb-4">
+                    {{ job.requirements|safe }}
+                </div>
+                {% endif %}
+                
+                {% if job.skills_required %}
+                <h5 class="fw-bold mb-3">Required Skills</h5>
+                <div class="mb-4">
+                    {% for skill in job.skills_required.split(',') %}
+                    <span class="skill-tag">{{ skill.strip() }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Apply for this Job</h5>
+                    {% if current_user.is_authenticated %}
+                        {% if has_applied %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>You have already applied for this job.
+                        </div>
+                        {% else %}
+                        <a href="{{ url_for('jobs.apply_job', job_id=job.id) }}" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="fas fa-paper-plane me-2"></i>Apply Now
+                        </a>
+                        {% endif %}
+                        {% if job.apply_url %}
+                        <a href="{{ job.apply_url }}" target="_blank" class="btn btn-outline-primary w-100">
+                            Apply on Company Site <i class="fas fa-external-link-alt ms-2"></i>
+                        </a>
+                        {% endif %}
+                    {% else %}
+                    <p class="text-muted mb-3">Please sign in to apply for this job.</p>
+                    <a href="{{ url_for('auth.login', next=request.url) }}" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In to Apply
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">About {{ job.company }}</h5>
+                    <p class="text-muted mb-2"><i class="fas fa-industry me-2"></i>{{ job.industry or 'Industry not specified' }}</p>
+                    <p class="text-muted mb-0"><i class="fas fa-calendar-alt me-2"></i>Posted {{ job.posted_date.strftime('%B %d, %Y') }}</p>
+                </div>
+            </div>
+            
+            {% if similar_jobs %}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Similar Jobs</h5>
+                    {% for similar in similar_jobs %}
+                    <div class="d-flex align-items-start mb-3 {% if not loop.last %}pb-3 border-bottom{% endif %}">
+                        <div class="company-logo bg-light rounded p-2 me-3" style="width: 45px; height: 45px;">
+                            <i class="fas fa-building text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-1"><a href="{{ url_for('jobs.job_detail', job_id=similar.id) }}" class="text-decoration-none">{{ similar.title }}</a></h6>
+                            <small class="text-muted">{{ similar.company }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

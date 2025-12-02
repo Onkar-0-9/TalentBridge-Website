@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Candidate Services</h1>
+        <p class="lead mb-0">Comprehensive career support to help you land your dream job.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-file-alt fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">CV Optimization</h5>
+                <p class="text-muted">Get your resume reviewed and optimized to stand out to recruiters and pass ATS systems.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-robot fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">AI Job Matching</h5>
+                <p class="text-muted">Our AI analyzes your skills and experience to recommend the most relevant opportunities.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-warning text-dark rounded-circle mx-auto mb-3">
+                    <i class="fas fa-user-tie fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Interview Prep</h5>
+                <p class="text-muted">Access interview tips, common questions, and preparation guides for your industry.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <h2 class="fw-bold mb-3">CV Optimization Tips</h2>
+            <ul class="list-unstyled">
+                <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong>Use Action Verbs:</strong> Start bullet points with powerful action verbs like "Led," "Developed," "Increased."
+                </li>
+                <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong>Quantify Achievements:</strong> Use numbers and percentages to demonstrate your impact.
+                </li>
+                <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong>Tailor Your Resume:</strong> Customize your resume for each job application.
+                </li>
+                <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong>Keep It Concise:</strong> Limit your resume to 1-2 pages with relevant information only.
+                </li>
+                <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    <strong>Include Keywords:</strong> Use industry-specific keywords from job descriptions.
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm bg-primary text-white p-4">
+                <h4 class="fw-bold mb-3">Ready to Get Started?</h4>
+                <p class="mb-4">Upload your resume and let our AI find the perfect job matches for you.</p>
+                <a href="{{ url_for('resumes.upload') }}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-upload me-2"></i>Upload Your Resume
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-4">Interview Preparation Guide</h2>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-lightbulb text-warning me-2"></i>Before the Interview</h5>
+                    <ul>
+                        <li class="mb-2">Research the company thoroughly</li>
+                        <li class="mb-2">Review the job description</li>
+                        <li class="mb-2">Prepare answers to common questions</li>
+                        <li class="mb-2">Plan your outfit and route</li>
+                        <li>Prepare questions to ask the interviewer</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-comments text-primary me-2"></i>During the Interview</h5>
+                    <ul>
+                        <li class="mb-2">Arrive 10-15 minutes early</li>
+                        <li class="mb-2">Maintain good eye contact</li>
+                        <li class="mb-2">Use the STAR method for behavioral questions</li>
+                        <li class="mb-2">Be honest and authentic</li>
+                        <li>Show enthusiasm for the role</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center py-5 bg-light rounded">
+        <h3 class="fw-bold mb-3">Join TalentBridge Today</h3>
+        <p class="text-muted mb-4">Create your profile and get matched with opportunities from top companies.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Create Account
+            </a>
+            <a href="{{ url_for('main.submit_cv') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-file-upload me-2"></i>Submit CV
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

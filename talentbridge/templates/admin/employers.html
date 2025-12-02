@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Employer Requests</h1>
+        <p class="lead mb-0">View and manage employer hiring requests.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a href="{{ url_for('admin.manage_employers') }}" class="btn btn-{{ 'primary' if not status_filter else 'outline-primary' }} btn-sm">All</a>
+            <a href="{{ url_for('admin.manage_employers', status='pending') }}" class="btn btn-{{ 'primary' if status_filter == 'pending' else 'outline-primary' }} btn-sm">Pending</a>
+            <a href="{{ url_for('admin.manage_employers', status='contacted') }}" class="btn btn-{{ 'primary' if status_filter == 'contacted' else 'outline-primary' }} btn-sm">Contacted</a>
+            <a href="{{ url_for('admin.manage_employers', status='closed') }}" class="btn btn-{{ 'primary' if status_filter == 'closed' else 'outline-primary' }} btn-sm">Closed</a>
+        </div>
+    </div>
+    
+    {% if employers.items %}
+    <div class="card border-0 shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Contact</th>
+                        <th>Industry</th>
+                        <th>Positions</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employer in employers.items %}
+                    <tr>
+                        <td><strong>{{ employer.company_name }}</strong></td>
+                        <td>{{ employer.contact_name }}<br><small class="text-muted">{{ employer.contact_email }}</small></td>
+                        <td>{{ employer.industry or '-' }}</td>
+                        <td>{{ employer.positions_count or '-' }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if employer.status == 'contacted' else 'warning' if employer.status == 'pending' else 'secondary' }}">
+                                {{ employer.status|title }}
+                            </span>
+                        </td>
+                        <td>{{ employer.submitted_at.strftime('%b %d, %Y') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.view_employer', employer_id=employer.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-building"></i>
+        <h4>No employer requests</h4>
+        <p class="text-muted">Employer requests will appear here when submitted.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">{{ candidate.name }}</h1>
+        <p class="lead mb-0">Candidate Profile</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Contact Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Email</label>
+                            <p class="fw-bold">{{ candidate.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Phone</label>
+                            <p class="fw-bold">{{ candidate.phone or 'Not provided' }}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 mt-4">Professional Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Current Role</label>
+                            <p class="fw-bold">{{ candidate.current_role or 'Not specified' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Experience</label>
+                            <p class="fw-bold">{{ candidate.experience_years or 0 }} years</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Expected Salary</label>
+                            <p class="fw-bold">{{ candidate.expected_salary or 'Not specified' }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if candidate.skills %}
+                    <h5 class="fw-bold mb-3 mt-4">Skills</h5>
+                    <div>
+                        {% for skill in candidate.skills.split(',') %}
+                        <span class="skill-tag">{{ skill.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">Update Status</h5>
+                    <form method="POST" action="{{ url_for('admin.update_candidate_status', candidate_id=candidate.id) }}">
+                        <div class="mb-3">
+                            <select class="form-select" name="status">
+                                <option value="new" {% if candidate.status == 'new' %}selected{% endif %}>New</option>
+                                <option value="reviewing" {% if candidate.status == 'reviewing' %}selected{% endif %}>Reviewing</option>
+                                <option value="contacted" {% if candidate.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                                <option value="rejected" {% if candidate.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" name="notes" rows="4">{{ candidate.notes or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body">
+                    <p class="text-muted mb-1">Submitted</p>
+                    <p class="fw-bold">{{ candidate.submitted_at.strftime('%B %d, %Y at %H:%M') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,241 @@
+I want you to create a full-stack, production-ready recruitment platform named TalentBridge Recruitment, using the following tech stack:
+
+Backend: Python Flask
+
+Frontend: HTML, CSS, JavaScript
+
+Database: MongoDB
+
+🎯 PROJECT PURPOSE
+
+Build a modern recruitment platform where users can find jobs from:
+
+LinkedIn
+
+Naukri
+
+Indeed
+
+Other hiring platforms
+
+The system should aggregate jobs from these sources (via scraping/APIs/placeholders as needed) so users don’t have to visit multiple platforms.
+
+Additionally, users will upload their resume, and the platform will automatically match them with relevant jobs based on their skills and experience.
+
+🚀 Core Features Required
+1. Home Page
+
+Hero section
+
+Job search bar
+
+Featured jobs (from MongoDB + aggregated platforms)
+
+Testimonials
+
+Quick links: Find Jobs / Hire Talent
+
+2. User Authentication
+
+User registration (email, password, basic details)
+
+Login system
+
+4-hour session per login using Flask session management
+
+Forgot password option
+
+Profile page: editable user info, resume upload section
+
+3. Resume Upload + Job Matching
+
+User uploads resume (.pdf/.docx)
+
+System extracts skills using NLP
+
+Match jobs based on skills, job titles, and experience
+
+Show “Recommended Jobs” page based on resume
+
+Store resume and extracted skills in MongoDB
+
+4. Job Aggregation System
+
+Create a backend module that collects job listings from:
+
+LinkedIn
+
+Naukri
+
+Indeed
+
+Other regional/global career platforms
+
+Aggregation can be done using:
+
+Scraping (BeautifulSoup/Requests/Selenium where allowed)
+
+Official APIs (placeholder implementation accepted)
+
+Periodic update using cron-like scheduler
+
+Store aggregated jobs into MongoDB for fast loading.
+
+5. Job Listings Page
+
+Display all jobs from:
+
+MongoDB (admin-posted jobs)
+
+Aggregated platforms
+
+Search & filter options:
+
+Keyword
+
+Location
+
+Industry
+
+Job type
+
+Pagination
+
+6. Job Detail Page
+
+Title, description, company, salary, location
+
+Apply button
+
+Save job option (saved jobs stored per user in MongoDB)
+
+7. Candidate Services Page
+
+CV optimization tips
+
+Interview preparation
+
+Resume upload CTA
+
+Candidate registration button
+
+8. Employer Services Page
+
+Hiring process explanation
+
+Employer request form
+
+Form fields: company name, job requirements, contact info
+
+Stored into MongoDB
+
+9. Submit CV / Candidate Registration Page
+
+Form: name, email, phone, skills, experience
+
+Resume upload
+
+All details stored in MongoDB
+
+10. Contact Page
+
+Contact form saved in MongoDB
+
+Office location & map
+
+11. Admin Dashboard
+
+Admin authentication
+
+CRUD operations for jobs
+
+View all candidate profiles
+
+View uploaded resumes
+
+Employer requests
+
+Manage testimonials
+
+⚙️ TECHNICAL REQUIREMENTS
+Backend
+
+Flask project with:
+
+Blueprints
+
+Jinja templates
+
+PyMongo database connection
+
+Session management (4-hour expiry)
+
+Job aggregation module
+
+Resume parsing module (NLP based)
+
+Authentication with password hashing
+
+Frontend
+
+Fully responsive HTML/CSS/JS
+
+Clean modern UI
+
+Bootstrap or Tailwind allowed
+
+Form validation in JavaScript
+
+Database (MongoDB Collections Needed)
+
+users
+
+jobs
+
+aggregated_jobs
+
+candidates
+
+resumes
+
+employers
+
+messages
+
+testimonials
+
+admins
+
+📦 DELIVERABLES
+
+Provide:
+
+Complete project folder structure
+
+Full Flask backend code
+
+All templates (HTML, CSS, JS)
+
+Job aggregation implementation
+
+Resume parsing + job matching engine
+
+MongoDB schema with example documents
+
+Instructions to install and run the project
+
+Sample test data for jobs, users, employers
+
+🧩 FINAL EXPECTATION
+
+Deliver a fully functional recruitment web application named TalentBridge Recruitment that:
+
+Aggregates jobs from LinkedIn, Naukri, Indeed
+
+Matches jobs to users through resume analysis
+
+Includes authentication + admin dashboard
+
+Uses Flask + MongoDB + HTML/CSS/JS
+
+Has clean, modern, ready-to-deploy code

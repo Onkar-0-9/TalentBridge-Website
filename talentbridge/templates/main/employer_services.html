@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Employer Services</h1>
+        <p class="lead mb-0">Find the best talent for your organization.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-primary text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-search fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Talent Search</h5>
+                <p class="text-muted">Access our database of qualified candidates matched to your requirements.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-success text-white rounded-circle mx-auto mb-3">
+                    <i class="fas fa-bullhorn fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Job Posting</h5>
+                <p class="text-muted">Post your job openings and reach thousands of active job seekers.</p>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="feature-icon bg-warning text-dark rounded-circle mx-auto mb-3">
+                    <i class="fas fa-handshake fa-2x"></i>
+                </div>
+                <h5 class="fw-bold">Recruitment Support</h5>
+                <p class="text-muted">Get dedicated support throughout your hiring process.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <h2 class="fw-bold mb-4">Our Hiring Process</h2>
+            <div class="d-flex mb-4">
+                <div class="step-number bg-primary text-white rounded-circle me-3">1</div>
+                <div>
+                    <h6 class="fw-bold">Submit Your Requirements</h6>
+                    <p class="text-muted mb-0">Tell us about the positions you need to fill and your ideal candidates.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="step-number bg-primary text-white rounded-circle me-3">2</div>
+                <div>
+                    <h6 class="fw-bold">We Source Candidates</h6>
+                    <p class="text-muted mb-0">Our team and AI systems identify the best matches from our talent pool.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="step-number bg-primary text-white rounded-circle me-3">3</div>
+                <div>
+                    <h6 class="fw-bold">Review & Interview</h6>
+                    <p class="text-muted mb-0">We present pre-screened candidates for your review and interviews.</p>
+                </div>
+            </div>
+            <div class="d-flex">
+                <div class="step-number bg-success text-white rounded-circle me-3">4</div>
+                <div>
+                    <h6 class="fw-bold">Make Your Hire</h6>
+                    <p class="text-muted mb-0">Select your ideal candidate and welcome them to your team!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="fw-bold mb-0">Request Hiring Assistance</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('main.employer_services') }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Company Name *</label>
+                                <input type="text" class="form-control" name="company_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Contact Name *</label>
+                                <input type="text" class="form-control" name="contact_name" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Email *</label>
+                                <input type="email" class="form-control" name="contact_email" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Phone</label>
+                                <input type="tel" class="form-control" name="phone">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Industry</label>
+                                <select class="form-select" name="industry">
+                                    <option value="">Select Industry</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Finance">Finance</option>
+                                    <option value="Healthcare">Healthcare</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Manufacturing">Manufacturing</option>
+                                    <option value="Retail">Retail</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Company Size</label>
+                                <select class="form-select" name="company_size">
+                                    <option value="">Select Size</option>
+                                    <option value="1-10">1-10 employees</option>
+                                    <option value="11-50">11-50 employees</option>
+                                    <option value="51-200">51-200 employees</option>
+                                    <option value="201-500">201-500 employees</option>
+                                    <option value="500+">500+ employees</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Hiring Needs *</label>
+                            <textarea class="form-control" name="hiring_needs" rows="4" placeholder="Describe the positions you're looking to fill, required skills, experience level, etc." required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Number of Positions</label>
+                                <input type="number" class="form-control" name="positions_count" min="1">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Budget Range</label>
+                                <input type="text" class="form-control" name="budget_range" placeholder="e.g., $80k-$120k">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-bold">Timeline</label>
+                                <input type="text" class="form-control" name="timeline" placeholder="e.g., 2-4 weeks">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="fw-bold">Testimonials</h1>
+        <p class="lead mb-0">Manage user testimonials displayed on the homepage.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="mb-0">{{ testimonials|length }} Testimonial(s)</h5>
+        <a href="{{ url_for('admin.create_testimonial') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add Testimonial
+        </a>
+    </div>
+    
+    {% if testimonials %}
+    <div class="row">
+        {% for testimonial in testimonials %}
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary text-white rounded-circle me-3">{{ testimonial.name[0] }}</div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">{{ testimonial.name }}</h6>
+                                <small class="text-muted">{{ testimonial.position }}{% if testimonial.company %} at {{ testimonial.company }}{% endif %}</small>
+                            </div>
+                        </div>
+                        {% if testimonial.is_approved %}
+                        <span class="badge bg-success">Approved</span>
+                        {% else %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="stars mb-2">
+                        {% for i in range(testimonial.rating) %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% endfor %}
+                    </div>
+                    
+                    <p class="mb-3">"{{ testimonial.content }}"</p>
+                    
+                    <div class="d-flex gap-2">
+                        <form action="{{ url_for('admin.toggle_testimonial_approval', testimonial_id=testimonial.id) }}" method="POST">
+                            <button type="submit" class="btn btn-sm btn-outline-{{ 'warning' if testimonial.is_approved else 'success' }}">
+                                {{ 'Unapprove' if testimonial.is_approved else 'Approve' }}
+                            </button>
+                        </form>
+                        <form action="{{ url_for('admin.delete_testimonial', testimonial_id=testimonial.id) }}" method="POST" onsubmit="return confirmDelete('Delete this testimonial?')">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <i class="fas fa-quote-left"></i>
+        <h4>No testimonials yet</h4>
+        <a href="{{ url_for('admin.create_testimonial') }}" class="btn btn-primary">Add Testimonial</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
