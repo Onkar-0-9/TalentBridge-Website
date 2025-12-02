@@ -6,7 +6,7 @@ TalentBridge is a full-stack recruitment platform that aggregates jobs from Link
 ## Tech Stack
 - **Backend**: Python Flask with Blueprints architecture
 - **Frontend**: HTML, CSS (Bootstrap 5), JavaScript
-- **Database**: PostgreSQL with SQLAlchemy ORM
+- **Database**: PostgreSQL with SQLAlchemy ORM 
 - **AI**: OpenAI GPT-4 for resume skill extraction and job recommendations
 
 ## Project Structure
